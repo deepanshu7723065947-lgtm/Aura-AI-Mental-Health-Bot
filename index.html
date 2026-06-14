@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Mental Health Companion Chatbot</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- Anonymous Login Screen -->
+    <div id="login-screen" class="overlay">
+        <div class="login-card glass">
+            <div class="login-header">
+                <div class="logo-icon">✨</div>
+                <h1>Welcome to Aura</h1>
+                <p>Your safe space to talk anonymously about stress, anxiety, and loneliness.</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="nickname">Choose a Nickname</label>
+                    <input type="text" id="nickname" placeholder="e.g., StarrySky, PeacefulWave (or leave empty)" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>Choose a Calming Avatar</label>
+                    <div class="avatar-selector">
+                        <div class="avatar-option active" data-avatar="🪷">🪷 <span>Lotus</span></div>
+                        <div class="avatar-option" data-avatar="☁️">☁️ <span>Cloud</span></div>
+                        <div class="avatar-option" data-avatar="🌊">🌊 <span>Wave</span></div>
+                        <div class="avatar-option" data-avatar="🌙">🌙 <span>Moon</span></div>
+                        <div class="avatar-option" data-avatar="🌲">🌲 <span>Pine</span></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Enter Anonymously</button>
+            </form>
+            <div class="login-footer">
+                <p>🔒 No data is stored, and your conversation is entirely private.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat Workspace -->
+    <div id="app-container" class="hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar glass">
+            <div class="sidebar-header">
+                <span class="logo">✨ Aura</span>
+                <span class="status-badge">Safe Space</span>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="user-profile">
+                <div class="profile-avatar" id="user-avatar-display">🪷</div>
+                <div class="profile-details">
+                    <h3 id="user-name-display">Guest</h3>
+                    <p>Anonymous Student</p>
+                </div>
+            </div>
+
+            <!-- Mood Tracker Metrics -->
+            <div class="sidebar-section">
+                <h4>Session Moods</h4>
+                <div class="mood-tracker">
+                    <div class="mood-bar-container">
+                        <div class="mood-label">🍀 Calm / Happy</div>
+                        <div class="progress-track"><div id="mood-bar-calm" class="progress-fill calm" style="width: 0%"></div></div>
+                    </div>
+                    <div class="mood-bar-container">
+                        <div class="mood-label">⚡ Stressed</div>
+                        <div class="progress-track"><div id="mood-bar-stressed" class="progress-fill stressed" style="width: 0%"></div></div>
+                    </div>
+                    <div class="mood-bar-container">
+                        <div class="mood-label">🌀 Anxious</div>
+                        <div class="progress-track"><div id="mood-bar-anxious" class="progress-fill anxious" style="width: 0%"></div></div>
+                    </div>
+                    <div class="mood-bar-container">
+                        <div class="mood-label">🌌 Lonely / Sad</div>
+                        <div class="progress-track"><div id="mood-bar-lonely" class="progress-fill lonely" style="width: 0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breathing Exercise -->
+            <div class="sidebar-section breathing-section">
+                <h4>4-7-8 Breathing Guide</h4>
+                <div class="breathing-widget">
+                    <div class="breathing-circle-outer">
+                        <div id="breathing-circle" class="breathing-circle-inner"></div>
+                        <span id="breathing-instruction">Tap Start</span>
+                    </div>
+                    <button id="btn-breathing" class="btn btn-secondary btn-sm">Start Guide</button>
+                </div>
+            </div>
+
+            <!-- Crisis Line Info -->
+            <div class="sidebar-footer">
+                <div class="crisis-card">
+                    <h5>Need immediate help?</h5>
+                    <p>Free, confidential support 24/7:</p>
+                    <a href="tel:988" class="crisis-link">📞 Call/Text 988 (Crisis Line)</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Chat Window -->
+        <main class="chat-window">
+            <header class="chat-header glass">
+                <div class="bot-info">
+                    <div class="bot-avatar">✨</div>
+                    <div>
+                        <h2>Aura</h2>
+                        <span class="bot-status"><span class="pulse-dot"></span> Listening & Support</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="btn-reset" title="Clear Chat" class="icon-btn"><i data-feather="rotate-ccw"></i></button>
+                </div>
+            </header>
+
+            <!-- Chat Messages Area -->
+            <div class="chat-messages" id="chat-messages-container">
+                <!-- Welcome Hero -->
+                <div class="welcome-hero" id="welcome-hero">
+                    <div class="hero-icon">✨</div>
+                    <h1>Hello! I'm Aura.</h1>
+                    <p>I am here to support you through the ups and downs of college life. Whether you're feeling stressed about exams, anxious about the future, lonely, or just need a safe space to share, we can talk through it.</p>
+                    <p class="subtitle">Select a topic below or type anything in the chat box to begin.</p>
+                    
+                    <div class="quick-prompts">
+                        <button class="prompt-chip" data-text="I have a huge exam tomorrow and I'm stressing out.">📚 Exam Stress</button>
+                        <button class="prompt-chip" data-text="I'm feeling really lonely and disconnected in my dorm.">🏘️ Dorm Loneliness</button>
+                        <button class="prompt-chip" data-text="I feel anxious about making friends and fitting in.">🤝 Social Anxiety</button>
+                        <button class="prompt-chip" data-text="Can you teach me a quick grounding exercise?">🧘 Grounding Exercise</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Relaxation Tip banner -->
+            <div id="dynamic-tip-banner" class="tip-banner hidden">
+                <div class="tip-content">
+                    <span class="tip-badge">Aura's Tip</span>
+                    <span id="tip-text">Try writing down three things you are grateful for today.</span>
+                </div>
+                <button id="close-tip" class="close-btn">&times;</button>
+            </div>
+
+            <!-- Dynamic Quote banner -->
+            <div id="dynamic-quote-banner" class="quote-banner hidden">
+                <p id="quote-text">"You are stronger than you know."</p>
+            </div>
+
+            <!-- Input Panel -->
+            <div class="chat-input-container glass">
+                <form id="chat-form">
+                    <input type="text" id="chat-input" placeholder="Share how you're feeling right now..." autocomplete="off">
+                    <button type="submit" id="btn-send" class="send-btn" disabled>
+                        <i data-feather="send"></i>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize icons -->
+    <script>
+        feather.replace();
+    </script>
+    <!-- Custom Script -->
+    <script src="js/app.js"></script>
+</body>
+</html>
